@@ -36,8 +36,6 @@ cd scripts
 
 2. Run the SQL scripts in your SQL development environment to perform various database operations. The scripts are organized based on their functionality.
 
-- `load_data_from_s3.sql`: Load data from AWS S3 bucket into Snowflake tables.
-- `data_operations.sql`: Perform various SQL operations on the loaded data.
 
 3. Monitor the execution and verify the results.
 
