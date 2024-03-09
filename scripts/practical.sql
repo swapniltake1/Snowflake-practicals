@@ -82,10 +82,10 @@ select min(amount),max(amount),avg(amount),count(amount) from payment;
 -- Which of the two is responsible for a higher overall payment amount?
 -- How do these amounts change if we don't consider amounts
 -- equal to 0?
-select count(*) from payment where staff_id=2 and amount!='0.00';--7992 --7983
-select count(*) from payment where staff_id=1 and amount!='0.00';--8057 --8042
-select sum(amount) from payment where staff_id=2;--33927.04
-select sum(amount) from payment where staff_id=1;--33489.47
+select count(*) from payment where staff_id=2 and amount!='0.00'; --7992 --7983
+select count(*) from payment where staff_id=1 and amount!='0.00'; --8057 --8042
+select sum(amount) from payment where staff_id=2; --33927.04
+select sum(amount) from payment where staff_id=1;  --33489.47
 
 select staff_id, count(*), sum(amount) from payment where amount!='0.00'
 group by staff_id;
@@ -99,3 +99,168 @@ where amount!='0.00'
 group by staff_id,date(payment_date)
 having count(*)>300
 order by count(*) desc;
+
+------------------------------------------------------------------------------------------
+
+-- 09/03/2024 Practical 
+/*
+In 2020, April 28, 29 and 30 were days with very high revenue
+That's why we want to focus in this task only on these days (filter accordingly).
+Find out what is the average payment amount grouped by customer and day – consider only the days/customers with more than 1 payment (per customer and day).
+Order by the average amount in a descending order.*/
+select customer_id,date(payment_date) as pay_dt ,avg(amount) as average, count(*) from payment where payment_date between '2020-04-28' and '2020-05-01'
+group by customer_id,pay_dt
+having count(*)>1
+order by average desc;
+select date(payment_date) from payment where payment_date like '2020-04-30%';
+
+-- Which employee had the highest sales amount in a single day?
+-- Which employee had the most sales in a single day (not
+-- counting payments with amount = 0?
+select staff_id,sum(amount),date(payment_date) as pay_dt,count(*) as no_of_transactions  from payment where amount != '0.00'
+group by staff_id,pay_dt
+order by sum(amount) desc;
+
+select 4+1,4-1,5/3,5%3,5*3,POW(5,3);
+select * from payment;
+
+select abs(-5),abs(5),ROUND(5.446346,2),CEIL(5.446346),FLOOR(5.446346);
+
+select amount,
+CASE 
+    WHEN amount > 10 THEN 'VERY HIGH'
+    WHEN amount > 8 THEN 'HIGH'
+    WHEN amount <=8 AND amount>5 THEN 'MEDIUM'
+    ELSE 'SMALL'
+END AS CATEGORY
+from payment;
+
+-- day 8 case 
+
+SELECT amount,
+CASE
+WHEN amount < 2 THEN 'low amount'
+WHEN amount < 5 THEN 'mediumamount'
+ELSE 'high amount'
+END
+FROM payment;
+
+SELECT
+TO_CHAR(book_date,'Dy'), 
+TO_CHAR(book_date,'Mon'),
+CASE
+WHEN TO_CHAR(book_date,
+'Dy')='Mon'THEN 'Monday special'
+WHEN TO_CHAR(book_date,
+'Mon')='Jul' THEN 'July special'
+END
+FROM bookings;
+
+SELECT
+TO_CHAR(book_date,'Dy'),
+TO_CHAR(book_date,'Mon'), 
+CASE
+WHEN TO_CHAR(book_date,
+'Dy')='Mon'THEN 'Monday special'
+WHEN TO_CHAR(book_date,
+'Mon')='Jul' THEN 'July special'
+ELSE 'no special'
+END
+FROM bookings;
+
+SELECT
+total_amount, 
+TO_CHAR(book_date,'Dy'), 
+CASE
+WHEN TO_CHAR(book_date,
+'Dy')='Mon'THEN 'Monday special'
+WHEN total_amount < 30000 THEN 'Special deal'
+ELSE 'no special at all'
+END
+FROM bookings;
+
+SELECT
+total_amount, 
+TO_CHAR(book_date,'Dy'), 
+CASE
+WHEN TO_CHAR(book_date,
+'Dy')='Mon'THEN 'Monday special' 
+WHEN total_amount*1.4 < 30000 THEN 'Special deal' ELSE
+'no special at all'
+END
+FROM bookings;
+-------------------------------------------------------------
+/* Challenge 
+You need to find out how many tickets you have sold in the
+following categories:
+• Low price ticket: total_amount< 20,000
+• Mid price ticket: total_amount between 20,000 and 150,000
+• High price ticket: total_amount >= 150,000
+How many high price tickets has the company sold?
+ */
+
+select * from bookings;
+
+SELECT 
+  CASE 
+    WHEN total_amount < 20000 THEN 'Low price ticket'
+    WHEN total_amount >= 20000 AND total_amount < 150000 THEN 'Mid price ticket'
+    WHEN total_amount >= 150000 THEN 'High price ticket'
+  END AS ticket_category,
+  COUNT(*) AS ticket_count
+FROM bookings
+GROUP BY ticket_category;
+
+
+--------------------------------------------------------------
+ /* Challenge
+ You need to find out how many flights have departed in the
+following seasons:
+• Winter:December, January,February
+• Spring:March, April,May
+• Summer:June, July,August
+• Fall:September, October, November
+*/
+
+SELECT 
+  CASE 
+    WHEN EXTRACT(MONTH FROM departure_date) IN (12, 1, 2) THEN 'Winter'
+    WHEN EXTRACT(MONTH FROM departure_date) IN (3, 4, 5) THEN 'Spring'
+    WHEN EXTRACT(MONTH FROM departure_date) IN (6, 7, 8) THEN 'Summer'
+    WHEN EXTRACT(MONTH FROM departure_date) IN (9, 10, 11) THEN 'Fall'
+  END AS season,
+  COUNT(*) AS flights_count
+FROM flights
+GROUP BY season;
+
+-------------------------------------------------------------
+/* challnge
+You want to create a tierlist in the following way:
+1. Rating is 'PG' or'PG-13' orlength is more then 210 min:
+'Great rating orlong (tier1)
+2. Description contains 'Drama' and length is more than 90min:
+'Long drama (tier2)'
+3. Description contains 'Drama' and length is not more than 90min:
+'Shcity drama (tier 3)'
+4. Rental_rate less than $1:
+'Very cheap (tier4)'
+If one movie can be in multiple categories it gets the highertier a ssigned.
+How can you filterto only those movies that appearin one of these 4 tiers?
+ */
+
+ SELECT 
+  title,
+  CASE 
+    WHEN rating IN ('PG', 'PG-13') OR length > 210 THEN 'Great rating or long (tier 1)'
+    WHEN description LIKE '%Drama%' AND length > 90 THEN 'Long drama (tier 2)'
+    WHEN description LIKE '%Drama%' AND length <= 90 THEN 'Short drama (tier 3)'
+    WHEN rental_rate < 1 THEN 'Very cheap (tier 4)'
+    ELSE 'Not in any tier'
+  END AS tier
+FROM movies
+WHERE 
+  rating IN ('PG', 'PG-13') OR length > 210 OR 
+  (description LIKE '%Drama%' AND length > 90) OR 
+  (description LIKE '%Drama%' AND length <= 90) OR 
+  rental_rate < 1;
+ -------------------------------------------------------------
