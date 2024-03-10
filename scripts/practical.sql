@@ -222,12 +222,14 @@ following seasons:
 • Fall:September, October, November
 */
 
+select * from flights limit 100;
+
 SELECT 
   CASE 
-    WHEN EXTRACT(MONTH FROM departure_date) IN (12, 1, 2) THEN 'Winter'
-    WHEN EXTRACT(MONTH FROM departure_date) IN (3, 4, 5) THEN 'Spring'
-    WHEN EXTRACT(MONTH FROM departure_date) IN (6, 7, 8) THEN 'Summer'
-    WHEN EXTRACT(MONTH FROM departure_date) IN (9, 10, 11) THEN 'Fall'
+    WHEN EXTRACT(MONTH FROM scheduled_departure) IN (12, 1, 2) THEN 'Winter'
+    WHEN EXTRACT(MONTH FROM scheduled_departure) IN (3, 4, 5) THEN 'Spring'
+    WHEN EXTRACT(MONTH FROM scheduled_departure) IN (6, 7, 8) THEN 'Summer'
+    WHEN EXTRACT(MONTH FROM scheduled_departure) IN (9, 10, 11) THEN 'Fall'
   END AS season,
   COUNT(*) AS flights_count
 FROM flights
@@ -248,6 +250,8 @@ If one movie can be in multiple categories it gets the highertier a ssigned.
 How can you filterto only those movies that appearin one of these 4 tiers?
  */
 
+select * from film;
+
  SELECT 
   title,
   CASE 
@@ -257,7 +261,7 @@ How can you filterto only those movies that appearin one of these 4 tiers?
     WHEN rental_rate < 1 THEN 'Very cheap (tier 4)'
     ELSE 'Not in any tier'
   END AS tier
-FROM movies
+FROM film
 WHERE 
   rating IN ('PG', 'PG-13') OR length > 210 OR 
   (description LIKE '%Drama%' AND length > 90) OR 
