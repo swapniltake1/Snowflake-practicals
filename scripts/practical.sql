@@ -268,3 +268,54 @@ WHERE
   (description LIKE '%Drama%' AND length <= 90) OR 
   rental_rate < 1;
  -------------------------------------------------------------
+
+ /*You need to find out how many flights have departed in the following seasons:
+Winter: Dec, Jan, Feb
+Spring: Mar . Apr May
+Summer: June July, Aug
+Fall: Sep , Oct, Nov*/
+select SEASON, COUNT(FLIGHT_NO) FROM (
+select MONTHNAME(SCHEDULED_DEPARTURE) AS month_departed, 
+CASE    WHEN month_departed IN ('Dec','Jan','Feb') THEN 'Winter'
+        WHEN month_departed IN ('Mar','Apr','May') THEN 'Spring'
+        WHEN month_departed IN ('Jun','Jul','Aug') THEN 'Summer'
+        WHEN month_departed IN ('Sep','Oct','Nov') THEN 'Fall'
+    ELSE 'INVALID SEASON'
+END AS SEASON,*
+from flights) 
+GROUP BY SEASON;
+
+--COALESCE--------------------------------------------------
+select COALESCE(NULL,'COLUMN IS EMPTY');
+
+SELECT TO_VARCHAR(363*430) , '4323', TO_NUMBER('4323');
+
+-- REPLACE-------------------------------------------------------
+select REPLACE(flight_no,'PG','') from flights;
+
+select REPLACE('PGalkjdPG3453','PG','');
+
+
+/*
+The airline company wants to understand in which category they sell most tickets.
+How many people choose seats in the category
+Business
+Economy or
+Comfort?
+You need to work on the seats table and the boarding_passes table.*/
+select * from seats limit 10;
+select * from boarding_passes limit 10;
+
+select s.fare_conditions,count(B.TICKET_NO) from boarding_passes AS B
+inner join seats AS S
+ON B.SEAT_NO = S.SEAT_NO
+group by s.fare_conditions;
+
+select * from payment ;
+select * from customer;
+
+select P.payment_id,p.amount,c.first_name,c.last_name 
+from payment AS P
+INNER JOIN CUSTOMER C
+ON P.CUSTOMER_ID=C.CUSTOMER_ID;
+
