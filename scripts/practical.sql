@@ -268,7 +268,7 @@ WHERE
   (description LIKE '%Drama%' AND length <= 90) OR 
   rental_rate < 1;
  -------------------------------------------------------------
-
+--  Day 31 Practical
  /*You need to find out how many flights have departed in the following seasons:
 Winter: Dec, Jan, Feb
 Spring: Mar . Apr May
@@ -319,3 +319,4 @@ from payment AS P
 INNER JOIN CUSTOMER C
 ON P.CUSTOMER_ID=C.CUSTOMER_ID;
 
+-----------------------------------------------------
