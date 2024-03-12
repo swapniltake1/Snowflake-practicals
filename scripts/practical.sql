@@ -320,3 +320,51 @@ INNER JOIN CUSTOMER C
 ON P.CUSTOMER_ID=C.CUSTOMER_ID;
 
 -----------------------------------------------------
+--  Practical 12 march 
+--JOINS
+-- The flight company is trying to find out what their most popular seats are.
+-- Try to find out which seat has been chosen most frequently. Make sure all seats are included even if they have never been booked.
+-- Are there seats that have never been booked?
+
+select * from seats;
+
+select distinct seat_no,RIGHT(seat_no,1) as series from boarding_passes;
+
+select seat_no,count(ticket_no) as no_of_bookings from boarding_passes group by seat_no 
+order by no_of_bookings desc;
+
+select RIGHT(seat_no,1) as series,count(ticket_no) as no_of_bookings from boarding_passes group by series
+order by no_of_bookings desc;
+
+-- The company wants to run a phone call campaing on all customers in Texas (=district).
+-- What are the customers (first_name, last_name, phone number and their district) from Texas?
+-- Are there any (old) addresses that are not related to any customer?
+select * from customer limit 10;
+select * from address limit 10;
+select c.first_name,c.last_name,a.phone,a.district from customer AS C
+left join address AS A
+ON C.address_id = A.address_id;
+
+-- The company wants customize their campaigns to customers depending on the country they are from.
+-- Which customers are from Brazil?
+-- Write a query to get first_name, last_name, email and the country from all customers from Brazil.
+
+select * from customer limit 10;
+
+select * from address ;
+
+select * from city limit 10;
+
+select * from country limit 10;
+
+select c.first_name,c.last_name,c.email,co.country 
+from customer AS C
+inner join address A
+ON C.address_id=A.address_id
+inner join city AS CI
+ON A.city_id = CI.city_id
+INNER JOIN COUNTRY AS CO
+ON CO.country_id = CI.country_id
+AND CO.country = 'Brazil';
+
+------------------------------------------
