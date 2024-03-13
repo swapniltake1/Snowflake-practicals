@@ -367,4 +367,18 @@ INNER JOIN COUNTRY AS CO
 ON CO.country_id = CI.country_id
 AND CO.country = 'Brazil';
 
-------------------------------------------
+---------------------------------
+
+-- DAY 35: 13th March 2024:
+--  UNION
+select distinct first_name,last_name from actor --199
+union 
+select distinct first_name,last_name from customer; --599
+
+select distinct first_name,last_name, first_name||last_name from actor where first_name||last_name IN (select distinct first_name||last_name from customer);
+
+select * from information_schema.tables;
+
+select first_name, last_name from actor
+union all
+select first_name, last_name from staff;
