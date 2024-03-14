@@ -382,3 +382,45 @@ select * from information_schema.tables;
 select first_name, last_name from actor
 union all
 select first_name, last_name from staff;
+
+-----------------------------------------------
+-- 14/03/2024
+create or replace database my_db_copy clone my_db;
+select * from customer;
+--create clone of table
+create or replace table customer_clone clone customer;
+select * from customer_clone;
+-- delete or truncate
+delete from customer_clone where address_id = 601;
+select * from customer_clone where address_id = 601;
+-- delete multiple records
+delete from customer_clone where address_id IN (7,8,45,14);
+-- delete all records from table
+delete from customer_clone; --deletes all records if used without where condition
+TRUNCATE TABLE customer_clone; -- deletes all records
+DROP TABLE customer_clone; -- Removes the table itself from database
+----------------------------------------------
+
+select * from customer_clone  WHERE last_name like 'A%';
+UPDATE customer_clone set first_name = 'LISA' WHERE customer_id =3;
+UPDATE customer_clone set first_name = customer_id*store_id  WHERE last_name like 'A%';
+
+create or replace table payment_clone clone payment;
+
+select * from payment_clone;
+update payment_clone set rental_id = amount + (50/100)*amount ;
+
+--create table
+
+CREATE TABLE employee
+(
+emp_id NUMBER NOT NULL COMMENT 'Employee ID',
+name TEXT COMMENT 'Employees name',
+address VARCHAR ) 
+COMMENT='This table as employee details';
+
+select * from employee;
+describe table employee;
+desc table employee;
+
+select * from information_schema.tables;
