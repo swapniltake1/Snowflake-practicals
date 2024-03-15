@@ -385,7 +385,7 @@ select first_name, last_name from staff;
 
 -----------------------------------------------
 -- 14/03/2024
-create or replace database my_db_copy clone my_db;
+create or replace database my_db_copy clone exceldata;
 select * from customer;
 --create clone of table
 create or replace table customer_clone clone customer;
@@ -451,10 +451,10 @@ INSERT INTO employee (id,name)
 values 
 (3,'shreyash1'),
 (4,'name2');
-;
+
 select * from employee;
 desc table employee;
-ALTER TABLE employee add CONSTRAINT   employee_uk UNIQUE(id);
+ALTER TABLE employee add CONSTRAINT emp UNIQUE(id);
 
 DROP TABLE IF EXISTS EMPLOYEE;
 
