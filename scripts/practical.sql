@@ -424,3 +424,42 @@ describe table employee;
 desc table employee;
 
 select * from information_schema.tables;
+
+
+
+---------------------------
+---- 15/03/2024 -----------
+
+create database demo;
+-- DROP Database demo;
+
+Create OR REPLACE table employee 
+(
+id number NOT NULL PRIMARY KEY,
+name varchar(10),
+address varchar(50) DEFAULT 'No address found',
+CONSTRAINT employee_uk UNIQUE(id,name)
+);
+
+INSERT INTO employee 
+values 
+(1,'shreyash','pune'),
+(2,'name1','address1')
+;
+
+INSERT INTO employee (id,name)
+values 
+(3,'shreyash1'),
+(4,'name2');
+;
+select * from employee;
+desc table employee;
+ALTER TABLE employee add CONSTRAINT   employee_uk UNIQUE(id);
+
+DROP TABLE IF EXISTS EMPLOYEE;
+
+ALTER TABLE employee rename COLUMN  name to first_name;
+ALTER TABLE EMPLOYEE RENAME TO employee1;
+select * from employee1;
+
+------------------------------------------------------
