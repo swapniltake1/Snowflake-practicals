@@ -463,3 +463,38 @@ ALTER TABLE EMPLOYEE RENAME TO employee1;
 select * from employee1;
 
 ------------------------------------------------------
+
+-- DAY 38 16th March 2024: 
+
+use Demo;
+
+create or replace table employee_distinct as
+select DISTINCT id,first_name,address from employee1;
+
+create or replace view employee_distinct_vw as
+select DISTINCT id,first_name,address from employee1;
+select * from employee_distinct;
+select * from employee_distinct_vw;
+select * from employee1;
+INSERT INTO employee1 (id,first_name)
+values 
+(7,'Swapnil'),
+(8,'Sonu');
+
+-- TIME TRAVEL  
+
+select * from employee_distinct;
+delete from employee_distinct where id ='1';
+insert into employee_distinct
+SELECT * FROM employee_distinct BEFORE(STATEMENT => '01b31211-3201-077e-0008-1372000180b2'); --- Query details coopied id;
+insert into  employee_distinct
+select * from employee_distinct at (offset=> -0*9);
+show parameters in schema public;
+
+select * from exceldata.PUBLIC.ticket_flights;--625ms -- 64ms
+
+select * from exceldata.public.boarding_passes; -- 1.6s -- 43 ms
+
+select * from exceldata.public.boarding_passes AS a
+full outer join  exceldata.PUBLIC.ticket_flights AS b
+ON a.ticket_no=b.ticket_no; --4.8 secs - 177 ms
